@@ -1,4 +1,4 @@
-import { Button, ThemeProvider } from "@gdgjp/ui";
+import { Button, ThemeProvider } from "@gdgjp/design-system";
 import { createRoot } from "react-dom/client";
 import "./tailwind.css";
 const root = document.getElementById("root");

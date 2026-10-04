@@ -8,18 +8,18 @@ GDG Apps の正式なWebデザインシステム。React 19、Radix Primitives�
 
 正本は [gdg-jp/design-system](https://github.com/gdg-jp/design-system) です。単独開発ではこのリポジトリのルートで `pnpm install` 後、以下を実行します。
 
-`gdg-jp/gdgjp` では `ui/` submodule として配置します。親で `git submodule update --init ui` を実行してから `pnpm install` してください。UI の変更はこのリポジトリへ先に commit・push し、親で `git add ui` して参照コミットを更新します。
+`gdg-jp/gdgjp` では `design-system/` submodule として配置します。親で `git submodule update --init design-system` を実行してから `pnpm install` してください。UI の変更はこのリポジトリへ先に commit・push し、親で `git add design-system` して参照コミットを更新します。
 
 | コマンド | 内容 |
 | --- | --- |
-| `pnpm --filter @gdgjp/ui dev` | Storybook、port 6006 |
-| `pnpm --filter @gdgjp/ui build` | ESM、型宣言、CSS、フォントをdistへ出力 |
-| `pnpm --filter @gdgjp/ui typecheck` | 実装・Storybookの型検査 |
-| `pnpm --filter @gdgjp/ui test` | 公開API・SSR・色のコントラスト |
-| `pnpm --filter @gdgjp/ui test:consumer` | ビルド済み公開exportのみでSSR・型解決・ブラウザービルド |
-| `pnpm --filter @gdgjp/ui test:e2e` | Storybook／consumerをビルドしてPlaywright・axe・画像比較 |
+| `pnpm --filter @gdgjp/design-system dev` | Storybook、port 6006 |
+| `pnpm --filter @gdgjp/design-system build` | ESM、型宣言、CSS、フォントをdistへ出力 |
+| `pnpm --filter @gdgjp/design-system typecheck` | 実装・Storybookの型検査 |
+| `pnpm --filter @gdgjp/design-system test` | 公開API・SSR・色のコントラスト |
+| `pnpm --filter @gdgjp/design-system test:consumer` | ビルド済み公開exportのみでSSR・型解決・ブラウザービルド |
+| `pnpm --filter @gdgjp/design-system test:e2e` | Storybook／consumerをビルドしてPlaywright・axe・画像比較 |
 
-ブラウザーの初回準備は `pnpm --filter @gdgjp/ui exec playwright install chromium`。生成物はコミットしません。画像比較の基準画像はテスト資産として管理します。
+ブラウザーの初回準備は `pnpm --filter @gdgjp/design-system exec playwright install chromium`。生成物はコミットしません。画像比較の基準画像はテスト資産として管理します。
 
 親モノレポの staged CI は、型検査・単体テスト・ビルドを Turbo の依存関係に沿って並列実行します。
 CI 内部の `build:e2e` は型宣言の生成に `--noCheck` を使い、別タスクの完全な型検査が成功してからブラウザーテストを開始します。
@@ -29,13 +29,13 @@ CI のブラウザー実行は最大4並列で、トレースは失敗後の最�
 
 ## 利用
 
-利用アプリのdependenciesに `"@gdgjp/ui": "workspace:*"` を登録します。親モノレポ内では `ui/` を pnpm workspace として引き続き利用します。
+利用アプリのdependenciesに `"@gdgjp/design-system": "workspace:*"` を登録します。親モノレポ内では `design-system/` を pnpm workspace として引き続き利用します。
 
 ```tsx
-import { ThemeProvider, Button, FormField, Input } from "@gdgjp/ui";
-import "@gdgjp/ui/tokens.css";
-import "@gdgjp/ui/components.css";
-import "@gdgjp/ui/fonts.css";
+import { ThemeProvider, Button, FormField, Input } from "@gdgjp/design-system";
+import "@gdgjp/design-system/tokens.css";
+import "@gdgjp/design-system/components.css";
+import "@gdgjp/design-system/fonts.css";
 
 export function App() {
   return (
@@ -58,9 +58,9 @@ export function App() {
 ```css
 @layer theme, base, gdg-tokens, gdg-base, gdg-components, utilities;
 @import "tailwindcss";
-@import "@gdgjp/ui/tailwind.css";
-@import "@gdgjp/ui/components.css";
-@import "@gdgjp/ui/fonts.css";
+@import "@gdgjp/design-system/tailwind.css";
+@import "@gdgjp/design-system/components.css";
+@import "@gdgjp/design-system/fonts.css";
 ```
 
 `tailwind.css` はトークンと `@theme inline` の対応表です。Tailwind本体やPreflightは含みません。上の例では利用側が `tailwindcss` のimportによってPreflightを選択しています。リセット不要ならTailwindのtheme.cssとutilities.cssだけを読み込んでください。
@@ -129,6 +129,6 @@ timestamp へ変換せず local year／month／day として扱います。
 - Sidebarは既定で`collapsible="icon"`です。SidebarHeader内のSidebarTriggerはタイトル右側の正方形アイコンボタンになり、閉じた状態ではメニュー項目のアイコンを残します。完全に収納する場合は`collapsible="offcanvas"`を指定します。
 - Toolbarは配置部品です。矢印キー操作を提供しないためARIA toolbarロールは付けません。
 - Skeletonは控えめなshimmerが走る装飾プレースホルダーです。読込状態はSpinnerのlabelか親のaria-busyとメッセージで通知し、reduced motionではshimmerを停止します。情報・成功・警告・危険は色とラベル／アイコンで表します。
-- `Icons` は `lucide-animated` を内部でラップしたアイコン部品です。使用側は `@gdgjp/ui` から `Icons` を読み込み、Lucideの名前（例：`name="Heart"`）を指定します。既定では `animateOnHover` が有効で、カーソルホバー時にアイコン固有のアニメーションを再生します。`animateOnHover={false}` で停止でき、`prefers-reduced-motion` では装飾的なホバーアニメーションを停止します。ラベル付きアイコンは `role="img"` を自動付与し、操作部品内の装飾アイコンには `aria-hidden="true"` を指定してください。
+- `Icons` は `lucide-animated` を内部でラップしたアイコン部品です。使用側は `@gdgjp/design-system` から `Icons` を読み込み、Lucideの名前（例：`name="Heart"`）を指定します。既定では `animateOnHover` が有効で、カーソルホバー時にアイコン固有のアニメーションを再生します。`animateOnHover={false}` で停止でき、`prefers-reduced-motion` では装飾的なホバーアニメーションを停止します。ラベル付きアイコンは `role="img"` を自動付与し、操作部品内の装飾アイコンには `aria-hidden="true"` を指定してください。
 
 詳細な判断基準・変更手順は [DESIGN.md](DESIGN.md)、組み合わせ例と状態一覧はStorybookを参照してください。

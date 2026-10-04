@@ -2,9 +2,9 @@
 
 ## Scope and Sources of Truth
 
-This directory is the private `@gdgjp/ui` React 19 design-system workspace. It must remain
+This directory is the private `@gdgjp/design-system` React 19 design-system workspace. It must remain
 independent of application routing, authentication, data fetching, and product-specific business
-logic. This repository is also consumed as the `ui/` submodule of `gdg-jp/gdgjp`.
+logic. This repository is also consumed as the `design-system/` submodule of `gdg-jp/gdgjp`.
 
 Read `DESIGN.md` before changing visual language, motion, accessibility behavior, tokens, or the
 public API. Treat `src/styles/tokens.css` as the only hand-edited token source. `README.md` documents
@@ -37,10 +37,10 @@ in the PR.
 Run focused checks from this repository root (or from the parent monorepo):
 
 ```sh
-pnpm --filter @gdgjp/ui typecheck
-pnpm --filter @gdgjp/ui test
-pnpm --filter @gdgjp/ui test:consumer
-pnpm --filter @gdgjp/ui test:e2e
+pnpm --filter @gdgjp/design-system typecheck
+pnpm --filter @gdgjp/design-system test
+pnpm --filter @gdgjp/design-system test:consumer
+pnpm --filter @gdgjp/design-system test:e2e
 ```
 
 Run `test:consumer` after changing exports, build scripts, CSS entry points, fonts, or package

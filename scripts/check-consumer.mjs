@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
-import { Button, ThemeProvider } from "@gdgjp/ui";
+import { Button, ThemeProvider } from "@gdgjp/design-system";
 import tailwind from "@tailwindcss/vite";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";

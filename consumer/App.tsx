@@ -12,7 +12,7 @@ import {
   Input,
   ThemeProvider,
   ThemeToggle,
-} from "@gdgjp/ui";
+} from "@gdgjp/design-system";
 
 const wikiIconNames = [
   "AlertCircle",

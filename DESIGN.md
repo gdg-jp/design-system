@@ -417,7 +417,7 @@ collapse to an icon rail; use `offcanvas` when it should leave the layout entire
 result of an action; errors that require resolution must also appear on the relevant field or in an
 alert. `Skeleton` is a restrained visual placeholder and is not, by itself, a loading announcement;
 use a labelled `Spinner`, a parent `aria-busy`, or an accompanying message. `Icons` wraps both the
-animated catalog and an explicit static Lucide registry so consumers import only from `@gdgjp/ui`.
+animated catalog and an explicit static Lucide registry so consumers import only from `@gdgjp/design-system`.
 `IconName` and `IconBaseName` are public type exports. Both sources share the outer `gdg-icons`
 wrapper, accessible-name ownership, size/style/stroke-width forwarding, and
 `startAnimation()`/`stopAnimation()` ref shape; static handles are no-ops and static hover never

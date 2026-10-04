@@ -2,7 +2,7 @@
  * Public icon-name contract for the Icons component.
  *
  * This list is intentionally independent from lucide-animated's type declarations so
- * consumers of @gdgjp/ui do not need to resolve that package for IconName.
+ * consumers of @gdgjp/design-system do not need to resolve that package for IconName.
  */
 export type IconBaseName =
   | "AArrowDown"
