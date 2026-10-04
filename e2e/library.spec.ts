@@ -348,13 +348,16 @@ test("menu selection keeps its label in place", async ({ page }) => {
   await page.goto(story("components-dropdownmenu--radio-selection"));
   const trigger = page.getByRole("button", { name: "表示形式" });
   const item = page.getByRole("menuitemradio", { name: "一覧" });
+  const menu = page.locator(".gdg-popup").filter({ has: item });
   await trigger.click();
+  await expect(menu).toHaveCSS("transform", "none");
   const [beforeItem, beforeLabel] = await Promise.all([
     item.boundingBox(),
     item.locator(".gdg-menu-item-label").boundingBox(),
   ]);
   await item.click();
   await trigger.click();
+  await expect(menu).toHaveCSS("transform", "none");
   const [afterItem, afterLabel] = await Promise.all([
     item.boundingBox(),
     item.locator(".gdg-menu-item-label").boundingBox(),
