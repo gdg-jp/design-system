@@ -21,6 +21,12 @@ GDG Apps の正式なWebデザインシステム。React 19、Radix Primitives�
 
 ブラウザーの初回準備は `pnpm --filter @gdgjp/ui exec playwright install chromium`。生成物はコミットしません。画像比較の基準画像はテスト資産として管理します。
 
+親モノレポの staged CI は、型検査・単体テスト・ビルドを Turbo の依存関係に沿って並列実行します。
+CI 内部の `build:e2e` は型宣言の生成に `--noCheck` を使い、別タスクの完全な型検査が成功してからブラウザーテストを開始します。
+`build:storybook:test` はすべての Story・Docs を残し、prop 推論とソースマップだけを省きます。
+`test:e2e:browser` はビルド済み成果物を使うため、単独で一式を検証する場合は従来どおり `test:e2e` を使ってください。
+CI のブラウザー実行は最大4並列で、トレースは失敗後の最初の再試行で記録します。
+
 ## 利用
 
 利用アプリのdependenciesに `"@gdgjp/ui": "workspace:*"` を登録します。親モノレポ内では `ui/` を pnpm workspace として引き続き利用します。

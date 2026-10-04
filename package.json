@@ -18,10 +18,13 @@
   "scripts": {
     "dev": "storybook dev -p 6006",
     "build": "node scripts/build.mjs",
+    "build:e2e": "node scripts/build.mjs --no-check",
     "build:storybook": "storybook build -o build/storybook",
-    "typecheck": "tsc --noEmit",
+    "build:storybook:test": "storybook build --test -o build/storybook",
+    "typecheck": "node scripts/typescript.mjs --noEmit",
     "test": "vitest run",
-    "test:e2e": "pnpm build && pnpm test:consumer && pnpm build:storybook && playwright test",
+    "test:e2e": "pnpm build && pnpm test:consumer && pnpm build:storybook && pnpm test:e2e:browser",
+    "test:e2e:browser": "playwright test",
     "test:consumer": "node scripts/check-consumer.mjs"
   },
   "dependencies": {

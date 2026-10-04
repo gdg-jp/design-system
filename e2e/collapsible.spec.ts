@@ -12,22 +12,39 @@ test("collapsible animates pointer open and close while keeping closed content i
   const content = page.locator(".gdg-collapsible-content");
   await expect(content).toHaveAttribute("data-state", "open");
   const openHeight = await content.evaluate((element) => element.getBoundingClientRect().height);
+  // Sample the browser's real transition at 50ms. Wall-clock sleeps can miss
+  // the entire 200ms animation when other browser workers keep the CPU busy.
+  await content.evaluate((element) => {
+    element.addEventListener("transitionrun", (event) => {
+      if (event.target !== element) return;
+      for (const animation of element.getAnimations()) {
+        animation.pause();
+        animation.currentTime = 50;
+      }
+    });
+  });
 
   await trigger.click();
   await expect(content).toHaveAttribute("data-state", "closed");
   await expect(content).toHaveCSS("transition-duration", "0.2s, 0.2s");
-  await page.waitForTimeout(50);
+  await expect
+    .poll(() => content.evaluate((element) => element.getBoundingClientRect().height))
+    .toBeLessThan(openHeight);
   const closingHeight = await content.evaluate((element) => element.getBoundingClientRect().height);
   expect(closingHeight).toBeGreaterThan(0);
   expect(closingHeight).toBeLessThan(openHeight);
-  await page.waitForTimeout(200);
+  await content.evaluate((element) => {
+    for (const animation of element.getAnimations()) animation.finish();
+  });
   await expect(content).toHaveCSS("height", "0px");
   await expect(content).toHaveCSS("opacity", "0");
   expect(await content.evaluate((element) => element.inert)).toBe(true);
 
   await trigger.click();
   await expect(content).toHaveAttribute("data-state", "open");
-  await page.waitForTimeout(50);
+  await expect
+    .poll(() => content.evaluate((element) => element.getBoundingClientRect().height))
+    .toBeGreaterThan(0);
   const openingHeight = await content.evaluate((element) => element.getBoundingClientRect().height);
   expect(openingHeight).toBeGreaterThan(0);
   expect(openingHeight).toBeLessThan(openHeight);

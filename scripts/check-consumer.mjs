@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import { access, readFile } from "node:fs/promises";
 import { Button, ThemeProvider } from "@gdgjp/ui";
 import tailwind from "@tailwindcss/vite";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { build } from "vite";
+import { runTypeScript } from "./typescript.mjs";
 assert.match(renderToString(createElement(Button, null, "保存")), /gdg-button/);
 assert.match(
   renderToString(
@@ -26,9 +26,7 @@ await build({
   },
 });
 console.log("Package-only consumer: SSR, nonce, fonts and browser build passed.");
-execFileSync("pnpm", ["exec", "tsc", "--noEmit", "-p", "consumer/tsconfig.json"], {
-  stdio: "inherit",
-});
+runTypeScript(["--noEmit", "-p", "consumer/tsconfig.json"]);
 const { build: esbuild } = await import("esbuild");
 await esbuild({
   entryPoints: ["consumer/App.tsx"],

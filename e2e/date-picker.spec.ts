@@ -47,10 +47,13 @@ test("controlled empty and external replace sync input, selection, and month", a
   await page.getByRole("button", { name: "Clear value" }).click();
   await expect(input).toHaveValue("");
   await input.click();
+  await expect(page.locator(".gdg-date-picker-content")).toBeVisible();
   await expect(page.locator('.gdg-calendar-day[aria-pressed="true"]')).toHaveCount(0);
 
   await page.getByRole("button", { name: "Replace value" }).click();
   await expect(input).toHaveValue("2026/11/03");
+  await expect(page.locator(".gdg-date-picker-content")).toBeHidden();
+  await input.click();
   await expect(page.locator('[data-date="2026-11-03"][aria-pressed="true"]')).toHaveCount(1);
 });
 
@@ -68,5 +71,7 @@ test("rejected controlled changes do not become committed display", async ({ pag
   await input.click();
   await page.locator('[data-date="2026-09-01"]').click();
   await expect(input).toHaveValue("2026/09/12");
+  await expect(page.locator(".gdg-date-picker-content")).toBeHidden();
+  await input.click();
   await expect(page.locator('[data-date="2026-09-12"][aria-pressed="true"]')).toHaveCount(1);
 });

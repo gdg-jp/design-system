@@ -4,6 +4,19 @@ const config: StorybookConfig = {
   addons: ["@storybook/addon-docs"],
   framework: "@storybook/react-vite",
   core: { disableTelemetry: true },
+  build: {
+    test: {
+      // Keep every story and documentation entry. CI does not need generated
+      // prop tables or source maps; the published Storybook still includes them.
+      disabledAddons: [],
+      disableDocgen: true,
+      disableSourcemaps: true,
+      disableBlocks: false,
+      disableMDXEntries: false,
+      disableAutoDocs: false,
+      disableTreeShaking: false,
+    },
+  },
   viteFinal: async (viteConfig) => ({
     ...viteConfig,
     resolve: {

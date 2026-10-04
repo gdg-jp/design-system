@@ -1,6 +1,6 @@
-import { execFileSync } from "node:child_process";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { build } from "esbuild";
+import { runTypeScript } from "./typescript.mjs";
 await rm("dist", { recursive: true, force: true });
 await mkdir("dist/styles", { recursive: true });
 await build({
@@ -12,7 +12,13 @@ await build({
   platform: "neutral",
   sourcemap: true,
 });
-execFileSync("pnpm", ["exec", "tsc", "-p", "tsconfig.build.json"], { stdio: "inherit" });
+// The E2E graph separately requires the full semantic typecheck before browsers
+// run. Declaration generation need not repeat that same check.
+runTypeScript([
+  "-p",
+  "tsconfig.build.json",
+  ...(process.argv.includes("--no-check") ? ["--noCheck"] : []),
+]);
 await cp("src/styles", "dist/styles", { recursive: true });
 await cp("assets", "dist/assets", { recursive: true });
 

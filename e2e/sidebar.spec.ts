@@ -67,8 +67,9 @@ test("sidebar trigger stays beside the title and collapses to navigation icons",
       groupLabel.evaluate((element) => Math.round(element.getBoundingClientRect().height)),
     )
     .toBe(16);
-  const insetBox = await page.locator(".gdg-sidebar-inset").boundingBox();
-  expect(insetBox?.x).toBe(64);
+  await expect
+    .poll(async () => (await page.locator(".gdg-sidebar-inset").boundingBox())?.x)
+    .toBe(64);
 
   const openingTransition = groupLabel.evaluate(
     (element) =>
