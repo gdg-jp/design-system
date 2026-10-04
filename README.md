@@ -6,7 +6,9 @@ GDG Apps の正式なWebデザインシステム。React 19、Radix Primitives�
 
 ## 開発
 
-リポジトリルートで `pnpm install` 後、以下を実行します。
+正本は [gdg-jp/design-system](https://github.com/gdg-jp/design-system) です。単独開発ではこのリポジトリのルートで `pnpm install` 後、以下を実行します。
+
+`gdg-jp/gdgjp` では `ui/` submodule として配置します。親で `git submodule update --init ui` を実行してから `pnpm install` してください。UI の変更はこのリポジトリへ先に commit・push し、親で `git add ui` して参照コミットを更新します。
 
 | コマンド | 内容 |
 | --- | --- |
@@ -21,7 +23,7 @@ GDG Apps の正式なWebデザインシステム。React 19、Radix Primitives�
 
 ## 利用
 
-利用アプリのdependenciesに `"@gdgjp/ui": "workspace:*"` を登録します。今回は既存アプリへの登録・換装は実施していません。
+利用アプリのdependenciesに `"@gdgjp/ui": "workspace:*"` を登録します。親モノレポ内では `ui/` を pnpm workspace として引き続き利用します。
 
 ```tsx
 import { ThemeProvider, Button, FormField, Input } from "@gdgjp/ui";

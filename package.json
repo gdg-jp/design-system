@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "files": ["dist"],
-  "sideEffects": ["**/*.css"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -55,6 +59,11 @@
     "vitest": "^4.1.10",
     "@playwright/test": "^1.49.1",
     "@axe-core/playwright": "^4.10.2",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "@types/node": "^22.15.30"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

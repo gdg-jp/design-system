@@ -4,7 +4,7 @@
 
 This directory is the private `@gdgjp/ui` React 19 design-system workspace. It must remain
 independent of application routing, authentication, data fetching, and product-specific business
-logic. Follow the repository-level guide as well as this file.
+logic. This repository is also consumed as the `ui/` submodule of `gdg-jp/gdgjp`.
 
 Read `DESIGN.md` before changing visual language, motion, accessibility behavior, tokens, or the
 public API. Treat `src/styles/tokens.css` as the only hand-edited token source. `README.md` documents
@@ -34,7 +34,7 @@ and deterministic behavior; use Playwright for browser interaction, accessibilit
 regressions. Inspect changed snapshots before accepting them and explain intentional visual changes
 in the PR.
 
-Run focused checks from the repository root:
+Run focused checks from this repository root (or from the parent monorepo):
 
 ```sh
 pnpm --filter @gdgjp/ui typecheck
