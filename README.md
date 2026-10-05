@@ -25,7 +25,12 @@ GDG Apps の正式なWebデザインシステム。React 19、Radix Primitives�
 CI 内部の `build:e2e` は型宣言の生成に `--noCheck` を使い、別タスクの完全な型検査が成功してからブラウザーテストを開始します。
 `build:storybook:test` はすべての Story・Docs を残し、prop 推論とソースマップだけを省きます。
 `test:e2e:browser` はビルド済み成果物を使うため、単独で一式を検証する場合は従来どおり `test:e2e` を使ってください。
-CI のブラウザー実行は最大4並列で、トレースは失敗後の最初の再試行で記録します。
+CI のブラウザー実行は最大6並列で、トレースは失敗後の最初の再試行で記録します。
+ビルドには Vite 8、型検査と宣言生成には native TypeScript 7 を使います。
+Storybook のドキュメント生成向けに TypeScript 6 の API も保持します。
+親の staged CI は新旧の submodule commit を比較し、単体テストだけの変更では関連する単体テストと型検査を実行します。
+E2E spec だけの変更は `GDG_UI_E2E_FILES`（JSON 配列）で対象を渡し、実装・CSS・設定などの変更は全件検証します。
+`PLAYWRIGHT_JSON_OUTPUT_NAME` を指定すると、通常の進捗表示とあわせてテスト別の実行時間を JSON に保存します。
 
 ## 利用
 
