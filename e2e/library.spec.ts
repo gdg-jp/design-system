@@ -88,7 +88,9 @@ test("select, tabs, accordion and menu support keyboard navigation", async ({ pa
   await catalog(page);
   await page.getByRole("combobox", { name: "公開設定" }).focus();
   await page.keyboard.press("Enter");
+  await expect(page.getByRole("option", { name: "下書き", exact: true })).toBeFocused();
   await page.keyboard.press("ArrowDown");
+  await expect(page.getByRole("option", { name: "公開", exact: true })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("combobox", { name: "公開設定" })).toContainText("公開");
   await page.getByRole("tab", { name: "概要" }).focus();
