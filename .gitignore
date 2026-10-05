@@ -4,3 +4,6 @@ build/
 .turbo/
 playwright-report/
 test-results/
+
+# TypeScript source must not be shadowed by emitted JavaScript.
+src/**/*.js

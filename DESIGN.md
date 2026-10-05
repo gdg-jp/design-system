@@ -284,6 +284,14 @@ and type rather than with extra decoration.
   removes it from the layout.
 - The application shell header is at least 64px tall. The sidebar is hidden in the simple shell
   below 768px; the composable sidebar can become a fixed mobile panel.
+- Omit `AppShell.header` for screens that already have a page heading: no empty desktop header
+  is rendered. `footer` stays at the bottom of the viewport-height sidebar and is available in
+  the mobile navigation Sheet. `collapsible="none"` omits the collapse trigger.
+- Compact forms may set input heights through `className`; textareas honor native `rows`
+  (default 4). Select values stay on one line and truncate within the available width. Icon
+  wrappers and their SVGs share the requested size; small IconButtons are 32px square.
+- Native Input/Textarea fill their container width; standalone Label is block-level so a
+  field's label and input do not accidentally share a line. Utilities may opt into inline layouts.
 - Coarse-pointer controls use at least 44px hit areas. Do not shrink a visual icon below the
   touch target just to make the layout denser.
 
@@ -402,6 +410,7 @@ Use `Tooltip` only for short supplemental context; required information must rem
 `Popover` is for a small action surface anchored to a trigger. `Dialog` temporarily concentrates
 work and must include a title and description. `Sheet` is for supporting navigation or context from
 an edge, while `AlertDialog` is for a confirmation that needs an explicit cancel and action.
+`ThemeToggle` opens an icon-triggered radio menu for light, dark, and system preferences.
 `DropdownMenu`, `ContextMenu`, `HoverCard`, `Menubar`, and `NavigationMenu` retain Radix keyboard
 navigation and placement semantics. Portal content inherits the document theme; per-subtree themes
 are not provided.

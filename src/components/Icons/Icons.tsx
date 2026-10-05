@@ -115,7 +115,10 @@ export const Icons = forwardRef<IconsHandle, IconsProps>(function Icons(
   const iconRef = useRef<IconsHandle>(null);
   const shouldAnimateOnHover =
     resolved.kind === "animated" && animateOnHover && !prefersReducedMotion;
-  const outerStyle = withStrokeWidth(style, strokeWidth);
+  const outerStyle = withStrokeWidth(
+    { "--gdg-icon-size": `${size}px`, ...style } as CSSProperties,
+    strokeWidth,
+  );
   const labelledRole = role ?? (ariaLabel || ariaLabelledBy ? "img" : undefined);
 
   useImperativeHandle(

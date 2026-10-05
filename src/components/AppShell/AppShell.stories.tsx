@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CalendarDays, Settings, Users } from "lucide-react";
+import { ThemeToggle } from "../../themes";
 import { AppShell } from "./AppShell";
 
 const navigation = (
@@ -39,3 +40,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const SidebarFooter: Story = {
+  args: {
+    header: undefined,
+    collapsible: "none",
+    footer: <ThemeToggle />,
+    brand: "GDG Japan Links",
+  },
+};

@@ -1,5 +1,14 @@
+import { Monitor, Moon, Sun } from "lucide-react";
 import { ThemeProvider as NextThemeProvider, useTheme } from "next-themes";
 import { type ComponentProps, useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "../components/DropdownMenu";
+import { IconButton } from "../components/IconButton";
 import { TooltipProvider } from "../components/Tooltip";
 
 export { useTheme };
@@ -48,20 +57,42 @@ export function ThemeToggle({
   "aria-label": label = "配色",
   className,
 }: { "aria-label"?: string; className?: string }) {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   return (
-    <select
-      aria-label={label}
-      className={`gdg-input ${className ?? ""}`}
-      value={mounted ? theme : "system"}
-      disabled={!mounted}
-      onChange={(e) => setTheme(e.target.value)}
-    >
-      <option value="system">システム</option>
-      <option value="light">ライト</option>
-      <option value="dark">ダーク</option>
-    </select>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <IconButton
+          aria-label={label}
+          className={className}
+          variant="ghost"
+          size="sm"
+          disabled={!mounted}
+        >
+          {mounted && resolvedTheme === "dark" ? (
+            <Moon size={16} aria-hidden="true" />
+          ) : (
+            <Sun size={16} aria-hidden="true" />
+          )}
+        </IconButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup value={mounted ? theme : "system"} onValueChange={setTheme}>
+          <DropdownMenuRadioItem value="light">
+            <Sun size={16} aria-hidden="true" />
+            ライト
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="dark">
+            <Moon size={16} aria-hidden="true" />
+            ダーク
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="system">
+            <Monitor size={16} aria-hidden="true" />
+            システム
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

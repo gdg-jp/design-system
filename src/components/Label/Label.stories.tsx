@@ -18,3 +18,11 @@ export const Default: Story = {
     </div>
   ),
 };
+export const StandaloneField: Story = {
+  render: () => (
+    <div style={{ width: 256 }}>
+      <Label htmlFor="standalone-label">Destination URL</Label>
+      <Input id="standalone-label" type="url" placeholder="https://example.com" />
+    </div>
+  ),
+};

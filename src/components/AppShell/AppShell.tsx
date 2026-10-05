@@ -13,6 +13,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -24,6 +25,8 @@ import {
 export function AppShell({
   navigation,
   header,
+  footer,
+  mainClassName,
   children,
   brand,
   navigationLabel = "ナビゲーション",
@@ -37,6 +40,8 @@ export function AppShell({
 }: {
   navigation: ReactNode;
   header?: ReactNode;
+  footer?: ReactNode;
+  mainClassName?: string;
   children: ReactNode;
   brand: ReactNode;
   navigationLabel?: string;
@@ -63,16 +68,17 @@ export function AppShell({
       <Sidebar aria-label={navigationLabel} collapsible={collapsible}>
         <SidebarHeader>
           <div className="gdg-sidebar-title">{brand}</div>
-          <SidebarTrigger />
+          {collapsible !== "none" && <SidebarTrigger />}
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>{navigation}</SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+        {footer && <SidebarFooter>{footer}</SidebarFooter>}
       </Sidebar>
       <div className="gdg-shell-body">
-        <header className="gdg-shell-header">
+        <header className={`gdg-shell-header${header ? "" : " gdg-shell-header-mobile"}`}>
           <div className="gdg-mobile-only">
             <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
               <SheetTrigger asChild>
@@ -94,6 +100,7 @@ export function AppShell({
                 >
                   {navigation}
                 </div>
+                {footer}
                 <SheetClose asChild>
                   <Button variant="outline">{closeNavigationLabel}</Button>
                 </SheetClose>
@@ -102,7 +109,7 @@ export function AppShell({
           </div>
           {header}
         </header>
-        <SidebarInset id="gdg-main" tabIndex={-1} className="gdg-main">
+        <SidebarInset id="gdg-main" tabIndex={-1} className={`gdg-main ${mainClassName ?? ""}`}>
           {children}
         </SidebarInset>
       </div>

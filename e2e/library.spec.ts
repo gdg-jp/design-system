@@ -263,9 +263,15 @@ test("sample editing, empty state, toast and confirmation", async ({ page }) => 
 });
 test("storybook theme control and sample navigation remain interactive", async ({ page }) => {
   await page.goto(story("patterns-admin--default"));
-  await page.getByLabel("配色").selectOption("dark");
+  await page.getByRole("button", { name: "配色" }).click();
+  await page.getByRole("menuitemradio", { name: "ダーク" }).click();
   await expect(page.locator("html")).toHaveClass("dark");
-  await expect(page.getByLabel("配色")).toHaveValue("dark");
+  await page.getByRole("button", { name: "配色" }).click();
+  await expect(page.getByRole("menuitemradio", { name: "ダーク" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await page.keyboard.press("Escape");
 
   for (const destination of ["リンク", "メンバー", "設定", "イベント"]) {
     const link = page.getByRole("link", { name: destination, exact: true });
@@ -310,10 +316,12 @@ test("SSR pre-paint theme, hydration, persistence and system changes", async ({ 
   errors.length = 0;
   await page.reload();
   await expect(page.getByLabel("配色")).toBeEnabled();
-  await page.getByLabel("配色").selectOption("light");
+  await page.getByRole("button", { name: "配色" }).click();
+  await page.getByRole("menuitemradio", { name: "ライト" }).click();
   await expect(page.locator("html")).toHaveClass("light");
   expect(await page.evaluate(() => localStorage.getItem("gdg-apps-theme"))).toBe("light");
-  await page.getByLabel("配色").selectOption("system");
+  await page.getByRole("button", { name: "配色" }).click();
+  await page.getByRole("menuitemradio", { name: "システム" }).click();
   await page.emulateMedia({ colorScheme: "dark" });
   await expect(page.locator("html")).toHaveClass("dark");
   await page.emulateMedia({ colorScheme: "light" });

@@ -10,6 +10,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const CompactLongValue: Story = {
+  render: () => (
+    <Select defaultValue="long">
+      <SelectTrigger style={{ width: 128, height: 32 }} aria-label="チャプター">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="long">非常に長い日本語のチャプター名</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+};
+
 export const Default: Story = {
   render: () => (
     <FormField label="開催形式" description="参加方法を選択してください。">

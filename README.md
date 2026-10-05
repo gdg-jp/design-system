@@ -74,7 +74,11 @@ export function App() {
 
 ### テーマとSSR
 
-`ThemeProvider` は文書単位で一つ配置します。既定は `system`、保存キーは `gdg-apps-theme`。`useTheme()` はnext-themesの `theme / resolvedTheme / setTheme` を返します。`ThemeToggle` はシステム・ライト・ダークの選択を提供します。
+`ThemeProvider` は文書単位で一つ配置します。既定は `system`、保存キーは `gdg-apps-theme`。`useTheme()` はnext-themesの `theme / resolvedTheme / setTheme` を返します。`ThemeToggle` はアイコンボタンからシステム・ライト・ダークを選ぶラジオメニューです。従来の native select から変更しているため、操作テストではボタンを開いて menuitemradio を選択してください。
+
+`AppShell` の `footer` はデスクトップのサイドバー下部とモバイルのナビゲーションSheetに表示します。`header` を省略するとデスクトップのヘッダーは表示されません。`collapsible="none"` では開閉ボタンを表示しません。`mainClassName` で本文の幅や余白を指定できます。
+
+`Input` と `SelectTrigger` は `className` の高さ指定を尊重し、`Textarea` は native `rows`（既定4）に従います。`Input` / `Textarea` は既定で親幅を使い、`Label` はブロック表示です。coarse pointer の44pxの操作領域は維持します。`Icons` の `size` は外側とSVGの両方に適用され、`className` のサイズ指定もSVGに反映されます。`IconButton` の `size="sm"` は32pxの正方形です。
 
 SSRでは `<html lang="ja" suppressHydrationWarning>` を使用してください。next-themesの初期化スクリプトが最初の描画前にhtmlのclassを設定します。CSP使用時はリクエストごとのnonceを `ThemeProvider nonce={nonce}` に渡します。Provider外の先行したテーマ依存UIを避け、テーマ値によってDOMを変える部分はマウント完了まで安定した内容を出力してください。
 
