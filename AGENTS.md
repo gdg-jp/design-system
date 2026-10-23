@@ -7,7 +7,9 @@ independent of application routing, authentication, data fetching, and product-s
 logic. This repository is also consumed as the `design-system/` submodule of `gdg-jp/gdgjp`.
 
 Read `DESIGN.md` before changing visual language, motion, accessibility behavior, tokens, or the
-public API. Treat `src/styles/tokens.css` as the only hand-edited token source. `README.md` documents
+public API. Its `## Harness` section maps the agent-facing contracts in `design/`, the checks in
+`harness/`, and the `design:*` scripts; DESIGN.md's front-matter is generated from tokens.css with
+`pnpm design:tokens`. Treat `src/styles/tokens.css` as the only hand-edited token source. `README.md` documents
 the consumer contract and must stay synchronized with user-visible API or integration changes.
 
 ## Component and Styling Conventions

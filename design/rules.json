@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "TOKENS-FRONTMATTER",
+      "kind": "generated",
+      "strength": "MUST",
+      "scope": ["design.harness"],
+      "requirement": "DESIGN.md front-matter equals the rendering of src/styles/tokens.css through design/frontmatter.json.",
+      "source": "AGENTS.md: tokens.css is the only hand-edited token source",
+      "verification": {
+        "check": "tokens-frontmatter"
+      },
+      "fix": "Edit src/styles/tokens.css (values) or design/frontmatter.json (mapping), then run pnpm design:tokens."
+    },
+    {
+      "id": "CATALOG-VIEW",
+      "kind": "generated",
+      "strength": "MUST",
+      "scope": ["design.harness"],
+      "requirement": "design/generated/catalog.md equals the rendering of the current contracts and rules.",
+      "source": "design/ contracts",
+      "verification": {
+        "check": "catalog-view"
+      },
+      "fix": "Run pnpm design:catalog after changing design/ contracts or rules."
+    },
+    {
+      "id": "CONTRACT-API",
+      "kind": "contract",
+      "strength": "MUST",
+      "scope": ["design.components"],
+      "requirement": "Every component contract names a real package export, and each declared variant and state renders its declared class and attributes.",
+      "source": "design/components/*.json",
+      "verification": {
+        "test": "src/design-contracts.test.tsx"
+      },
+      "fix": "Correct the contract to match the implementation, or change the implementation through a reviewed public-contract change."
+    },
+    {
+      "id": "TOKEN-NO-RAW-COLOR",
+      "kind": "jsx-literal-pattern",
+      "strength": "MUST",
+      "scope": ["design.dos-and-donts"],
+      "requirement": "Screens do not put literal colors in style or className; they use semantic tokens.",
+      "source": "DESIGN.md Do's and Don'ts: don't add literal theme colors",
+      "detector": {
+        "props": ["style", "className"],
+        "pattern": "#[0-9a-fA-F]{3,8}\\b|\\b(?:rgb|rgba|hsl|hsla|oklch)\\("
+      },
+      "fix": "Use var(--gdg-*) or a semantic utility such as text-muted / bg-surface."
+    },
+    {
+      "id": "IMPORT-PUBLIC-API",
+      "kind": "import-policy",
+      "strength": "MUST",
+      "scope": ["design.components"],
+      "requirement": "Screens import UI only from @gdgjp/design-system (or the package's own src in its examples), not from the primitives it wraps.",
+      "source": "DESIGN.md Components: Icons wraps Lucide so consumers import only from @gdgjp/design-system; Radix is the interaction foundation",
+      "detector": {
+        "forbidden": [
+          "radix-ui",
+          "@radix-ui/",
+          "lucide-react",
+          "lucide-animated",
+          "sonner",
+          "next-themes",
+          "@gdgjp/design-system/src",
+          "@gdgjp/design-system/dist"
+        ]
+      },
+      "fix": "Import the wrapped component (Icons, Toaster, ThemeProvider, Dialog, ...) from @gdgjp/design-system."
+    },
+    {
+      "id": "ICON-BUTTON-NAME",
+      "kind": "jsx-required-prop",
+      "strength": "MUST",
+      "scope": ["component.button"],
+      "requirement": "Every IconButton has a nonempty aria-label.",
+      "source": "DESIGN.md Actions: IconButton requires an accessible label",
+      "detector": {
+        "components": ["IconButton"],
+        "props": ["aria-label"]
+      },
+      "fix": "Add aria-label describing the action, e.g. aria-label=\"メニューを開く\"."
+    },
+    {
+      "id": "RADIO-GROUP-NAME",
+      "kind": "jsx-requires-context",
+      "strength": "MUST",
+      "scope": ["design.components"],
+      "requirement": "A RadioGroup has an accessible name from an enclosing FormField/Field or its own aria-label/aria-labelledby.",
+      "source": "DESIGN.md Forms and selection: give the group an accessible name",
+      "detector": {
+        "components": ["RadioGroup"],
+        "ancestors": ["FormField", "Field", "FieldSet"],
+        "props": ["aria-label", "aria-labelledby"]
+      },
+      "fix": "Wrap it in FormField with a label, or pass aria-labelledby pointing at a visible heading."
+    },
+    {
+      "id": "FORM-ERROR-AT-FIELD",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "In the invalid state the input has aria-invalid=true, its aria-describedby includes a visible error message, and focus is on that input.",
+      "source": "DESIGN.md Do's and Don'ts: put resolvable errors next to the affected field",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Pass the message through FormField error and focus the first invalid field on submit."
+    },
+    {
+      "id": "FORM-PENDING",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "Repeated activation while a save is pending sends exactly one request; the submit control is aria-busy and the entered value stays visible.",
+      "source": "design/patterns/edit-form.json states.pending",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Use Button loading for the submit action and ignore submissions while a request is in flight."
+    },
+    {
+      "id": "FORM-RECOVERY",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "A rejected save keeps the edited value, shows a danger Alert, and a retry reaches the success state.",
+      "source": "design/patterns/edit-form.json states.server-error",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Keep form state on failure; render Alert tone=danger with the retry path."
+    },
+    {
+      "id": "ACTION-SINGLE-PRIMARY",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "Each scenario state shows at most one visible primary Button.",
+      "source": "DESIGN.md Actions: one primary action per screen",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Give secondary actions variant=\"outline\" or \"ghost\" (Button defaults to primary)."
+    },
+    {
+      "id": "LAYOUT-NO-PAGE-OVERFLOW",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "At every scenario viewport, including the long-name data, the page has no horizontal overflow and the submit button is fully inside the viewport width.",
+      "source": "DESIGN.md Layout: overflow must not expand the page horizontally",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Let content wrap (Inline, min-width: 0) instead of fixing widths."
+    },
+    {
+      "id": "A11Y-AXE",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "axe (wcag2a, wcag2aa) reports no violations in each state and theme, with the documented primary/secondary contrast exclusion.",
+      "source": "DESIGN.md Colors: primary/secondary are action surfaces with a documented 3:1 control threshold",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Fix the reported node; do not widen the exclusion without a decision record."
+    },
+    {
+      "id": "KEYBOARD-SUBMIT",
+      "kind": "browser",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "Keyboard alone can reach the name input and the submit button in reading order, focus is visibly outlined, and Enter in the input submits.",
+      "source": "DESIGN.md Accessibility and motion contract",
+      "verification": {
+        "test": "e2e/design-profile-edit.spec.ts"
+      },
+      "fix": "Use a form element with Button type=\"submit\"; do not remove the focus outline."
+    },
+    {
+      "id": "TASK-FIT",
+      "kind": "review",
+      "strength": "MUST",
+      "scope": ["pattern.edit-form"],
+      "requirement": "A member can tell what to change, which action saves it, and whether it was saved — in both themes and both viewports.",
+      "source": "design/scenarios/profile-edit.json brief",
+      "verification": {
+        "evidence": "screenshots of every state, theme, and viewport in the run directory"
+      },
+      "fix": "Review the screenshots against the brief; record the judgment in design/decisions.md."
+    },
+    {
+      "id": "INPUT-LABEL",
+      "strength": "MUST",
+      "scope": ["component.input"],
+      "requirement": "Every Input and Textarea has a label: an enclosing FormField/Field, or its own aria-label/aria-labelledby. A placeholder is not a label.",
+      "source": "DESIGN.md Forms and selection: each item has a visible or programmatic label; design/components/input.json content",
+      "fix": "Wrap the control in FormField with a label, or give a search-style field aria-label (for example aria-label=\"タグを検索\").",
+      "kind": "jsx-requires-context",
+      "detector": {
+        "components": ["Input", "Textarea"],
+        "ancestors": ["FormField", "Field"],
+        "props": ["aria-label", "aria-labelledby"]
+      }
+    }
+  ],
+  "adoptions": [
+    {
+      "proposalId": "input-label",
+      "proposalDigest": "de79b1ae4c3088864aa20d124d5622c13627e48f88673feb1122ed9f2e975805",
+      "ruleId": "INPUT-LABEL",
+      "decision": {
+        "status": "accepted",
+        "reviewer": "Harineko0",
+        "reason": "Placeholder-only inputs (tinyurl tags search) are unlabeled; accepted as MUST with the known wrapper false positive. Re-based after a formatting-only change invalidated the first proposal.",
+        "reviewedDigest": "40d74a6abdb8c9d8a6d786618c956259b50db4cfd3ae94756f7efffc07d2c5c9"
+      },
+      "appliedAt": "2026-10-23T14:55:09.216Z"
+    }
+  ]
+}

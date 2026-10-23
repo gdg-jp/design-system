@@ -490,3 +490,88 @@ states, document keyboard and focus behavior, and consider labels, reduced motio
 long Japanese content, and narrow layouts. Keep implementation, stories, tests, consumer examples,
 `README.md`, and this document synchronized. Review appearance changes against the baseline images,
 and record intentional snapshot changes with the change.
+
+## Harness
+
+This section is the entrypoint for agents and reviewers who build or check screens with this
+system. It maps each kind of knowledge to the one file that owns it and gives the task sequence.
+Contracts in `design/` are retrievable through the CLI and the MCP server; both use the same
+loader and checker in `harness/`.
+
+| Knowledge | Authority | Consumers |
+| --- | --- | --- |
+| Token values (light/dark) | `src/styles/tokens.css` | components.css, Tailwind map, this file's front-matter |
+| This file's front-matter | Generated from tokens.css through `design/frontmatter.json` | Design tools that read DESIGN.md |
+| Visual language, usage, motion, accessibility | The sections of this file | Agents (resources `design.*`), reviewers |
+| Component behavior and public API | `src/components/<Name>/` and `src/index.ts` | Everything |
+| Supported component use for harness tasks | `design/components/*.json` | Resolver; `src/design-contracts.test.tsx` checks them against the API |
+| Page composition | `design/patterns/*.json` | Resolver, browser checks |
+| Task brief, data, states, transitions | `design/scenarios/*.json` | Stories, `e2e/design-*.spec.ts` |
+| Binding requirements and their checks | `design/rules.json` | `harness/` checkers, Playwright specs |
+| Contextual decisions and rejected ideas | `design/decisions.md` | Reviewers, the improve workflow |
+| Pending lessons | `design/proposals/` | Maintainers only; never retrieved as guidance |
+| Reference view | `design/generated/catalog.md` (generated) | Humans |
+
+Rules state a strength and how they are verified: `generated` (non-mutating drift check),
+`contract` (Vitest), source detectors (static TSX analysis), `browser` (Playwright against the
+scenario's story), and `review` (rendered evidence for a person to judge). A mechanical pass does
+not settle `review` rules.
+
+### Task sequence
+
+1. Read the scenario brief and resolve its context: `pnpm design:resolve scenario.<id>` (or the MCP
+   tool `resolve_design_context`). Read the returned pattern, component, and DESIGN.md sections.
+2. Implement every state in the scenario with the package's components and tokens.
+3. Run `pnpm design:check scenario.<id>` and read `test-results/design/<run>/report.md` and the
+   screenshots it lists.
+4. Fix the failing rule IDs and rerun against the new revision. Stop after two automatic correction
+   rounds without progress, or when a fix would need a new product or design decision.
+5. Review the screenshots against the brief (rules of kind `review`) and leave unresolved choices
+   to the responsible person in the report or `design/decisions.md`.
+6. Turn a repeated correction into the smallest lasting change: a scenario, contract, pattern, rule,
+   or decision record (see the design-improve Skill and `pnpm design:feedback`).
+
+### Commands
+
+Run from `packages/design-system/` (or prefix `pnpm --filter @gdgjp/design-system`):
+
+| Command | Does |
+| --- | --- |
+| `pnpm design:tokens` | Regenerate this file's front-matter from tokens.css |
+| `pnpm design:catalog` | Regenerate `design/generated/catalog.md` |
+| `pnpm design:resolve <scenario>` | Contracts, rules, and Skills for a scenario (JSON) |
+| `pnpm design:search <query>` | Search resource IDs, titles, and descriptions |
+| `pnpm design:check-source <file> [scenario]` | Static rules on a TSX/TS file; exit 1 on violations |
+| `pnpm design:check <scenario> [--skip-build]` | Every rule for the scenario; writes `test-results/design/<run>/` |
+| `pnpm design:feedback propose\|decide\|apply` | Record a lesson, its decision, and its adoption |
+| `pnpm design:mcp` | stdio MCP server with the same resources and checks |
+
+`design:check` exits nonzero when a required mechanical rule fails, has no executed check, or the
+run errors. Each run records the artifact revision (a digest of `src/`, `.storybook/`, `e2e/`,
+`design/`, DESIGN.md, and package.json, including uncommitted changes) and the contract revision.
+`--skip-build` reuses `build/storybook` only when that build was made from the same artifact
+revision; otherwise the browser rules are reported as not evaluated.
+
+### MCP and Agent Skills
+
+The `gdg-design` MCP server (`node packages/design-system/harness/mcp.mjs`, stdio) serves the
+same resources as `design:resolve` under `gdg-design://<id>` and three tools:
+`search_design`, `resolve_design_context`, and `check_source` (static rules only; same checker as
+`design:check-source`). It loads one snapshot per process, so restart it after any change to this
+file, tokens.css, `design/`, or the Skills. To connect a client, register that command; for
+Claude Code: `claude mcp add gdg-design -- node packages/design-system/harness/mcp.mjs` from the
+monorepo root.
+
+The workflows live in the monorepo's `.agents/skills/` (linked from `.claude/skills/`):
+`design-build` (implement and pass a scenario), `design-review` (report findings without
+editing), and `design-improve` (turn a lesson into a reviewed rule or contract change). Scenarios
+name the Skills they need, and the resolver returns them. Outside the monorepo, set
+`GDG_DESIGN_SKILLS_DIR`; without Skills the resolver refuses rather than returning partial
+context.
+
+### Ownership and revalidation
+
+The design-system maintainers own `design/` and decide proposals. Rerun `design:check` for every
+scenario after changing tokens, a component used by a scenario, the Storybook setup, Playwright,
+or the model or agent client that builds screens. Retire or merge rules that duplicate each other
+instead of appending; keep the history in `design/decisions.md`.

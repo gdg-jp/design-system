@@ -1,0 +1,53 @@
+{
+  "id": "pattern.edit-form",
+  "kind": "pattern",
+  "title": "Edit form",
+  "description": "Edit one object on one screen without losing entered values when validation or saving fails.",
+  "refs": [
+    "component.page-header",
+    "component.card",
+    "component.stack",
+    "component.form-field",
+    "component.input",
+    "component.alert",
+    "component.button"
+  ],
+  "skills": [],
+  "details": {
+    "purpose": "The user changes a value, understands whether it was saved, and can recover from a failure without retyping.",
+    "regions": [
+      {
+        "id": "heading",
+        "components": ["component.page-header"],
+        "content": "h1 names the object; one-sentence purpose."
+      },
+      {
+        "id": "feedback",
+        "components": ["component.alert"],
+        "content": "Save result (success or failure) as a persistent Alert above the fields, inside the form card."
+      },
+      {
+        "id": "fields",
+        "components": ["component.form-field", "component.input"],
+        "content": "One FormField per value; validation errors render on the field."
+      },
+      {
+        "id": "actions",
+        "components": ["component.button"],
+        "content": "Inline row at the end of the form: one primary submit (保存), lower-emphasis secondary actions (outline or ghost)."
+      }
+    ],
+    "readingOrder": ["heading", "feedback", "fields", "actions"],
+    "layout": {
+      "narrow": "Below 768px: single column, Card padding 16px, actions wrap and remain reachable without horizontal scrolling.",
+      "wide": "Content column limited to a readable width (about 640px) inside the 1280px page; same reading order."
+    },
+    "states": {
+      "invalid": "Field error via FormField.error; focus returns to the first invalid field; no toast-only error.",
+      "pending": "Submit Button uses loading; repeated activation sends one request; entered values stay visible.",
+      "success": "success Alert states what was saved; the form keeps the saved value.",
+      "server-error": "danger Alert says the value was not saved and offers a retry; the edited value is preserved."
+    },
+    "exclusions": "Multi-step wizards, autosave, and optimistic updates need their own pattern."
+  }
+}

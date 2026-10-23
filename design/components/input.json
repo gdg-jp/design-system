@@ -1,0 +1,24 @@
+{
+  "id": "component.input",
+  "kind": "component",
+  "title": "Input",
+  "description": "Native text input with the inset clay surface; inherits id and ARIA state from an enclosing FormField.",
+  "refs": ["design.components", "design.layout"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/Input/Input.tsx",
+    "export": "Input",
+    "story": "src/components/Input/Input.stories.tsx",
+    "when": "Single-line text entry. Use Textarea for multi-line text.",
+    "render": { "props": { "aria-label": "表示名" } },
+    "states": {
+      "disabled": { "props": { "disabled": true }, "attributes": { "disabled": "" } },
+      "readonly": { "props": { "readOnly": true }, "attributes": { "readonly": "" } }
+    },
+    "content": "Do not use placeholder as the only label.",
+    "behavior": {
+      "width": "Fills its container width.",
+      "label": "Needs a visible label through FormField or a programmatic aria-label/aria-labelledby."
+    }
+  }
+}

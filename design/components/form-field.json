@@ -1,0 +1,27 @@
+{
+  "id": "component.form-field",
+  "kind": "component",
+  "title": "FormField",
+  "description": "Owns one input's label, description, error message, and required/invalid/disabled state.",
+  "refs": ["design.components", "component.input"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/FormField/FormField.tsx",
+    "export": "FormField",
+    "story": "src/components/FormField/FormField.stories.tsx",
+    "when": "Wrap exactly one Input, Textarea, Select, or similar control. Do not put several independent inputs in one FormField.",
+    "render": {
+      "props": { "label": "表示名", "error": "表示名を入力してください" },
+      "children": { "component": "Input" }
+    },
+    "states": {
+      "invalid": { "props": { "error": "表示名を入力してください" }, "attributes": {} }
+    },
+    "content": "label is a noun phrase; description explains the effect; error says how to fix the value.",
+    "behavior": {
+      "ids": "Generates stable ids and connects the child control through aria-describedby (help, then error).",
+      "invalid": "Passing error sets aria-invalid on the child control and renders the message next to it.",
+      "ownership": "The consumer owns name, validation, and submission."
+    }
+  }
+}

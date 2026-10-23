@@ -7,3 +7,6 @@ test-results/
 
 # TypeScript source must not be shadowed by emitted JavaScript.
 src/**/*.js
+
+# Design harness: lock file of in-progress feedback maintenance.
+design/proposals/.lock

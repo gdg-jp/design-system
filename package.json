@@ -25,7 +25,15 @@
     "test": "vitest run",
     "test:e2e": "pnpm build && pnpm test:consumer && pnpm build:storybook && pnpm test:e2e:browser",
     "test:e2e:browser": "playwright test",
-    "test:consumer": "node scripts/check-consumer.mjs"
+    "test:consumer": "node scripts/check-consumer.mjs",
+    "design:tokens": "node harness/cli.mjs tokens",
+    "design:catalog": "node harness/cli.mjs catalog",
+    "design:resolve": "node harness/cli.mjs resolve",
+    "design:search": "node harness/cli.mjs search",
+    "design:check-source": "node harness/cli.mjs check-source",
+    "design:check": "node harness/cli.mjs check",
+    "design:feedback": "node harness/cli.mjs feedback",
+    "design:mcp": "node harness/mcp.mjs"
   },
   "dependencies": {
     "radix-ui": "^1.4.3",
@@ -59,7 +67,9 @@
     "@playwright/test": "^1.49.1",
     "@axe-core/playwright": "^4.10.2",
     "esbuild": "^0.28.1",
-    "@types/node": "^22.15.30"
+    "@types/node": "^22.15.30",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.1"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {

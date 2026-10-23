@@ -1,0 +1,17 @@
+{
+  "id": "component.page-header",
+  "kind": "component",
+  "title": "PageHeader",
+  "description": "Page-level h1 title, optional description, and optional page actions.",
+  "refs": ["design.layout"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/PageHeader/PageHeader.tsx",
+    "export": "PageHeader",
+    "story": "src/components/PageHeader/PageHeader.stories.tsx",
+    "when": "Once per screen as its h1. Form submit actions belong with the form, not in PageHeader actions.",
+    "render": { "props": { "title": "プロフィール" } },
+    "content": "title names the object; description states the purpose in one sentence.",
+    "behavior": { "heading": "Always renders a level-1 Heading." }
+  }
+}

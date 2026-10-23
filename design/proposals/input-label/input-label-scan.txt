@@ -1,0 +1,32 @@
+# Scan: <Input>/<Textarea> outside FormField/Field without aria-label/aria-labelledby (2026-10-23)
+apps/img/app/features/images/components/url-builder-card.tsx:140:13 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/img/app/features/images/components/url-builder-card.tsx:162:13 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/features/analytics/components/analytics/analytics-filter-button.tsx:173:9 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/features/analytics/components/analytics/analytics-filter-button.tsx:274:9 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/features/folders/components/folder-detail.tsx:290:9 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/features/links/components/create-link-dialog.tsx:553:17 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/features/links/components/edit-fields.tsx:161:9 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+apps/tinyurl/app/routes/tags/tags.tsx:126:15 <Input> has no aria-label or aria-labelledby or id or an enclosing FormField/Field/InputGroup/Label.
+total 8 files 431
+
+# apps/tinyurl/app/routes/tags/tags.tsx:120-134
+            <div className="relative">
+              <Icons
+                name="Search"
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted"
+              />
+              <Input
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search..."
+                className="h-10 rounded-full bg-surface/40 pl-10"
+              />
+
+# apps/img/app/features/images/components/url-builder-card.tsx:272-274 (false positive: wrapper renders FormField)
+function Control({ label, children }: { label: string; children: React.ReactNode }) {
+  return <FormField label={label}>{children}</FormField>;
+}

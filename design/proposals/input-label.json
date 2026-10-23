@@ -1,0 +1,31 @@
+{
+  "id": "input-label",
+  "observation": "A repository scan (431 TSX files: apps that import the design system, plus its own src) found 8 Input elements outside FormField/Field with no aria-label or aria-labelledby. apps/tinyurl/app/routes/tags/tags.tsx:126 is a search field labelled only by its placeholder \"Search...\", which DESIGN.md (Forms and selection) and the Input contract do not allow. Two hits in apps/img are false positives: a local Control wrapper renders FormField, and the static detector does not follow wrappers. No current rule catches either case.",
+  "scope": "component.input: every scenario that resolves Input, and check-source runs without a scenario. Not a change to Input itself.",
+  "evidence": ["design/proposals/input-label/input-label-scan.txt"],
+  "target": "design/rules.json",
+  "rule": {
+    "id": "INPUT-LABEL",
+    "strength": "MUST",
+    "scope": ["component.input"],
+    "requirement": "Every Input and Textarea has a label: an enclosing FormField/Field, or its own aria-label/aria-labelledby. A placeholder is not a label.",
+    "source": "DESIGN.md Forms and selection: each item has a visible or programmatic label; design/components/input.json content",
+    "fix": "Wrap the control in FormField with a label, or give a search-style field aria-label (for example aria-label=\"タグを検索\").",
+    "kind": "jsx-requires-context",
+    "detector": {
+      "components": ["Input", "Textarea"],
+      "ancestors": ["FormField", "Field"],
+      "props": ["aria-label", "aria-labelledby"]
+    }
+  },
+  "baseRevision": "9368d2804bc68c036fb6b1b063677d1f4fff29ee2accb7f89add62af779150af",
+  "evidenceDigests": {
+    "design/proposals/input-label/input-label-scan.txt": "937982e29472b19c1276230f1d3421b8aa52a661ad87041ae42651f568398322"
+  },
+  "decision": {
+    "status": "accepted",
+    "reviewer": "Harineko0",
+    "reason": "Placeholder-only inputs (tinyurl tags search) are unlabeled; accepted as MUST with the known wrapper false positive. Re-based after a formatting-only change invalidated the first proposal.",
+    "reviewedDigest": "40d74a6abdb8c9d8a6d786618c956259b50db4cfd3ae94756f7efffc07d2c5c9"
+  }
+}

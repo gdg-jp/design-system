@@ -1,0 +1,16 @@
+{
+  "id": "component.card",
+  "kind": "component",
+  "title": "Card",
+  "description": "A single raised clay surface with generous padding; never nested.",
+  "refs": ["design.components", "design.elevation-depth"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/Card/Card.tsx",
+    "export": "Card",
+    "story": "src/components/Card/Card.stories.tsx",
+    "when": "Group one related set of content or fields. Organize inside it with Stack, Inline, and Separator instead of another Card.",
+    "render": { "props": {}, "children": "内容" },
+    "behavior": { "padding": "24px on desktop and 16px on narrow screens." }
+  }
+}

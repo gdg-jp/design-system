@@ -1,0 +1,41 @@
+{
+  "id": "scenario.profile-edit",
+  "kind": "scenario",
+  "title": "Profile edit",
+  "description": "A chapter member changes their display name and recovers from a failed save.",
+  "refs": ["pattern.edit-form"],
+  "skills": ["design-build", "design-review", "design-improve"],
+  "details": {
+    "brief": {
+      "user": "A GDG chapter member updating how their name appears to other participants, on a phone or a laptop.",
+      "goal": "Change the display name, see that it was saved, and retry without retyping when saving fails.",
+      "nonGoals": ["Avatar upload", "Account deletion", "Routing or authentication"]
+    },
+    "artifact": {
+      "source": ["src/examples/ProfileEdit.stories.tsx"],
+      "storybookTitle": "Patterns/Profile Edit",
+      "story": "patterns-profile-edit--default",
+      "args": {
+        "outcome": "accept | reject | hold — how the mocked save responds",
+        "initialName": "the saved display name"
+      },
+      "testHooks": "window.__profileSave = { calls, release() } exists only in the story to count and release mocked save requests."
+    },
+    "data": {
+      "displayName": "山田 花子",
+      "editedName": "山田 花子（GDG Tokyo）",
+      "longName": "とても長い表示名の確認用テキストとして日本語の名前と所属コミュニティ名をつなげた文字列GDGTokyoOrganizerTeam"
+    },
+    "states": ["default", "invalid", "pending", "success", "server-error"],
+    "transitions": [
+      { "from": "default", "action": "clear the name and submit", "to": "invalid" },
+      { "from": "invalid", "action": "enter a name and submit", "to": "pending" },
+      { "from": "default", "action": "edit the name and submit", "to": "pending" },
+      { "from": "pending", "action": "server accepts", "to": "success" },
+      { "from": "pending", "action": "server rejects", "to": "server-error" },
+      { "from": "server-error", "action": "retry with the preserved value", "to": "pending" }
+    ],
+    "viewports": [{ "width": 390, "height": 844 }, { "width": 1280, "height": 800 }],
+    "themes": ["light", "dark"]
+  }
+}

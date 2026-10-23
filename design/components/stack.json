@@ -1,0 +1,16 @@
+{
+  "id": "component.stack",
+  "kind": "component",
+  "title": "Stack and Inline",
+  "description": "Layout primitives: Stack is the 16px vertical rhythm; Inline wraps related controls with a 12px gap.",
+  "refs": ["design.layout"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/Stack/Stack.tsx",
+    "export": "Stack",
+    "story": "src/components/Stack/Stack.stories.tsx",
+    "when": "Compose regions and groups. Inline (src/components/Inline/Inline.tsx) is the horizontal, wrapping counterpart.",
+    "render": { "props": {}, "children": "内容" },
+    "behavior": { "wrap": "Inline wraps, so action rows do not overflow narrow screens." }
+  }
+}

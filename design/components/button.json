@@ -1,0 +1,36 @@
+{
+  "id": "component.button",
+  "kind": "component",
+  "title": "Button",
+  "description": "In-page action control with one primary action per screen, loading state, and native button type.",
+  "refs": ["design.components", "design.elevation-depth"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/Button/Button.tsx",
+    "export": "Button",
+    "story": "src/components/Button/Button.stories.tsx",
+    "when": "Trigger an in-page action. Use Link (or Button asChild with an anchor) for navigation.",
+    "render": { "props": {}, "children": "保存" },
+    "variants": {
+      "variant": {
+        "values": ["primary", "secondary", "outline", "ghost", "danger"],
+        "className": "gdg-button-{value}",
+        "default": "primary"
+      },
+      "size": { "values": ["sm", "md", "lg"], "className": "gdg-size-{value}", "default": "md" }
+    },
+    "states": {
+      "loading": {
+        "props": { "loading": true },
+        "attributes": { "aria-busy": "true", "disabled": "" }
+      },
+      "disabled": { "props": { "disabled": true }, "attributes": { "disabled": "" } }
+    },
+    "content": "Label states the action (保存, 削除). An icon-only action uses IconButton with aria-label.",
+    "behavior": {
+      "type": "Defaults to type=\"button\"; pass type=\"submit\" for the form's submit action.",
+      "pending": "Use loading while a request is in flight: it disables activation, sets aria-busy, and shows a spinner.",
+      "priority": "variant defaults to primary, so every additional Button in a screen needs an explicit lower-emphasis variant."
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "component.alert",
+  "kind": "component",
+  "title": "Alert",
+  "description": "Persistent inline feedback with a semantic tone; danger alerts are announced with role=alert.",
+  "refs": ["design.components"],
+  "skills": [],
+  "details": {
+    "implementation": "src/components/Alert/Alert.tsx",
+    "export": "Alert",
+    "story": "src/components/Alert/Alert.stories.tsx",
+    "when": "Feedback that must remain visible until the user acts, such as a failed save. Toast is only for short-lived results.",
+    "render": { "props": { "title": "保存できませんでした" } },
+    "variants": {
+      "tone": {
+        "values": ["neutral", "info", "success", "warning", "danger"],
+        "className": "gdg-tone-{value}",
+        "default": "info"
+      }
+    },
+    "states": {
+      "danger": { "props": { "tone": "danger" }, "attributes": { "role": "alert" } }
+    },
+    "content": "title states what happened; children say what the user can do next.",
+    "behavior": { "announcement": "tone=danger uses role=alert; other tones use role=status." }
+  }
+}
