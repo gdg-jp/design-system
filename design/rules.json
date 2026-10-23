@@ -207,6 +207,18 @@
         "ancestors": ["FormField", "Field"],
         "props": ["aria-label", "aria-labelledby"]
       }
+    },
+    {
+      "id": "NATIVE-SELECT",
+      "strength": "MUST",
+      "scope": ["design.components"],
+      "requirement": "Screens use Select (SelectTrigger/SelectContent/SelectItem) for one choice from a list, not NativeSelect.",
+      "source": "DESIGN.md Forms and selection: Select for one choice from a larger set; maintainer decision 2026-10-24",
+      "fix": "Replace NativeSelect/NativeSelectOption with Select, SelectTrigger, SelectValue, SelectContent and SelectItem; pass name to Select when a form posts the value.",
+      "kind": "jsx-forbidden-component",
+      "detector": {
+        "components": ["NativeSelect"]
+      }
     }
   ],
   "adoptions": [
@@ -221,6 +233,18 @@
         "reviewedDigest": "40d74a6abdb8c9d8a6d786618c956259b50db4cfd3ae94756f7efffc07d2c5c9"
       },
       "appliedAt": "2026-10-23T14:55:09.216Z"
+    },
+    {
+      "proposalId": "native-select",
+      "proposalDigest": "62dae0abe4540921454916ade6e1821c5a9a834b1c6c8994344f2fc1cec69ab4",
+      "ruleId": "NATIVE-SELECT",
+      "decision": {
+        "status": "accepted",
+        "reviewer": "Harineko0",
+        "reason": "Chosen by the maintainer: MUST for all apps with a detector (design-system Select instead of the browser-native select).",
+        "reviewedDigest": "0cdd34376dc191ca90475ad27c45fddd61bddbaba5959b2c71d49ff83b4cbeaf"
+      },
+      "appliedAt": "2026-10-23T19:17:54.461Z"
     }
   ]
 }

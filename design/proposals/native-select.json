@@ -1,0 +1,29 @@
+{
+  "id": "native-select",
+  "observation": "apps/deck's editor used NativeSelect for every choice (action, mode, target, page, grid size). The maintainer asked for the design-system Select instead: the browser-native popup does not match the GDG surface, menu styling or keyboard model. No current detector catches it: import-policy matches module paths, and NativeSelect ships from @gdgjp/design-system itself.",
+  "scope": "design.components: every screen that renders a single-choice control.",
+  "evidence": ["design/proposals/native-select/native-select-action-fields.tsx"],
+  "target": "design/rules.json",
+  "rule": {
+    "id": "NATIVE-SELECT",
+    "strength": "MUST",
+    "scope": ["design.components"],
+    "requirement": "Screens use Select (SelectTrigger/SelectContent/SelectItem) for one choice from a list, not NativeSelect.",
+    "source": "DESIGN.md Forms and selection: Select for one choice from a larger set; maintainer decision 2026-10-24",
+    "fix": "Replace NativeSelect/NativeSelectOption with Select, SelectTrigger, SelectValue, SelectContent and SelectItem; pass name to Select when a form posts the value.",
+    "kind": "jsx-forbidden-component",
+    "detector": {
+      "components": ["NativeSelect"]
+    }
+  },
+  "baseRevision": "29fa87c370d3dea156934b62a9ea786b6be75556b7f4ed98759bb3832718d604",
+  "evidenceDigests": {
+    "design/proposals/native-select/native-select-action-fields.tsx": "805941ecfff01f3d35ac4b748872699f55818204114d847c74dd5073c611db38"
+  },
+  "decision": {
+    "status": "accepted",
+    "reviewer": "Harineko0",
+    "reason": "Chosen by the maintainer: MUST for all apps with a detector (design-system Select instead of the browser-native select).",
+    "reviewedDigest": "0cdd34376dc191ca90475ad27c45fddd61bddbaba5959b2c71d49ff83b4cbeaf"
+  }
+}

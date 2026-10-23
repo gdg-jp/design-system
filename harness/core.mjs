@@ -81,6 +81,11 @@ export const sourceRuleSchema = z.discriminatedUnion("kind", [
   }),
   z.strictObject({
     ...ruleBase,
+    kind: z.literal("jsx-forbidden-component"),
+    detector: z.strictObject({ components: names }),
+  }),
+  z.strictObject({
+    ...ruleBase,
     kind: z.literal("jsx-literal-pattern"),
     detector: z.strictObject({ props: z.array(text).min(1), pattern: text }),
   }),

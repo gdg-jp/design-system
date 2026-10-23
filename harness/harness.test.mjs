@@ -168,6 +168,28 @@ describe("source checker", () => {
     const result = checkSource(harness, { source: clean, filename: "fixture.tsx" });
     expect(result.violations).toEqual([]);
   });
+  it("flags NativeSelect and passes the design-system Select", () => {
+    const native = `import { NativeSelect, NativeSelectOption } from "@gdgjp/design-system";
+export const A = () => (
+  <NativeSelect aria-label="形式">
+    <NativeSelectOption value="a">A</NativeSelectOption>
+  </NativeSelect>
+);
+`;
+    const custom = `import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@gdgjp/design-system";
+export const A = () => (
+  <Select defaultValue="a">
+    <SelectTrigger aria-label="形式"><SelectValue /></SelectTrigger>
+    <SelectContent><SelectItem value="a">A</SelectItem></SelectContent>
+  </Select>
+);
+`;
+    const failed = checkSource(harness, { source: native, filename: "a.tsx" });
+    expect(failed.violations.filter((v) => v.rule === "NATIVE-SELECT")).toHaveLength(1);
+    expect(failed.violations.find((v) => v.rule === "NATIVE-SELECT").location).toBe("a.tsx:3:3");
+    const passed = checkSource(harness, { source: custom, filename: "a.tsx" });
+    expect(passed.violations).toEqual([]);
+  });
   it("rejects unsupported inputs", () => {
     expect(() => checkSource(harness, { source: clean, filename: "fixture.html" })).toThrow();
     expect(() => checkSource(harness, { source: "", filename: "a.tsx" })).toThrow();

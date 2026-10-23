@@ -4,6 +4,27 @@ Contextual decisions for harness tasks, with their reasons and scope. Binding, c
 requirements go to `design/rules.json`; this file keeps the reasoning, accepted exceptions, and
 rejected ideas so later reviews do not repeat them. Newest first.
 
+## 2026-10-24 — NATIVE-SELECT adopted
+
+- Decision: Screens use `Select` (SelectTrigger/SelectValue/SelectContent/SelectItem) for one
+  choice from a list, never `NativeSelect` (`NATIVE-SELECT`, MUST, scope `design.components`).
+- Evidence: Proposal `design/proposals/native-select.json` and its copy of the pre-fix
+  `apps/deck/app/features/deck/components/ActionFields.tsx`, whose every choice used
+  NativeSelect. The maintainer asked for the design-system Select instead of the browser-native
+  popup.
+- Decided by: Harineko0 (accepted, chose MUST for all apps with a detector over a SHOULD note or a
+  deck-only fix). Applied through `pnpm design:feedback apply native-select`.
+- Detector: the existing kinds could not express it (`import-policy` matches module paths, and
+  NativeSelect ships from `@gdgjp/design-system`), so the harness gained
+  `jsx-forbidden-component` (`harness/core.mjs`, `harness/source-check.mjs`).
+- Verified on the next run: `design:resolve scenario.profile-edit` returns the rule;
+  `design:check-source` exits 1 on the proposal's copy and 0 on the fixed deck file and on
+  `Select.stories.tsx`; `harness.test.mjs` covers a NativeSelect and a Select case.
+- Known limit: NativeSelect itself stays exported, and its own stories and the design-system
+  source are reported if checked. Forms that post the value pass `name` to `Select` (Radix
+  renders a hidden native select).
+- Open: other apps' NativeSelect usages are app changes, not part of this decision.
+
 ## 2026-10-23 — INPUT-LABEL adopted
 
 - Decision: Every Input and Textarea needs an enclosing FormField/Field or its own

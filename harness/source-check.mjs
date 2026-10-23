@@ -109,6 +109,11 @@ export function inspectSource(sourceText, filename, rules) {
         rule.kind === "jsx-literal-pattern" ? new RegExp(rule.detector.pattern) : null;
       for (const { node, ancestors } of targets) {
         const name = tagName(node);
+        if (rule.kind === "jsx-forbidden-component") {
+          inspected++;
+          fail(node, `<${name}> is not used in screens.`);
+          continue;
+        }
         if (rule.kind === "jsx-literal-pattern") {
           for (const prop of rule.detector.props) {
             const { found } = attribute(node, prop);
