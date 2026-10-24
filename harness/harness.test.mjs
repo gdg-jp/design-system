@@ -30,6 +30,9 @@ import { checkSource } from "./source-check.mjs";
 import { renderFrontmatter, splitFrontmatter } from "./tokens.mjs";
 
 const hasSkills = existsSync(skillsRoot());
+// Each spawned CLI or MCP server cold-loads TypeScript and the harness. The monorepo CI runs every
+// workspace's tests side by side on one runner, where that can exceed Vitest's 5s default.
+const PROCESS_TIMEOUT = 30_000;
 const cli = (args, options = {}) =>
   spawnSync(process.execPath, [join(packageRoot, "harness/cli.mjs"), ...args], {
     encoding: "utf8",
@@ -70,7 +73,7 @@ describe("authority", () => {
     expect(loadHarness().contractRevision).toBe(harness.contractRevision);
     expect(new Set(harness.resources.map((r) => r.uri)).size).toBe(harness.resources.length);
   });
-  it("keeps DESIGN.md front-matter generated from tokens.css", () => {
+  it("keeps DESIGN.md front-matter generated from tokens.css", { timeout: PROCESS_TIMEOUT }, () => {
     expect(splitFrontmatter(harness.designMd).frontmatter).toBe(harness.expectedFrontmatter());
     expect(cli(["tokens", "--check"]).status).toBe(0);
   });
@@ -194,7 +197,7 @@ export const A = () => (
     expect(() => checkSource(harness, { source: clean, filename: "fixture.html" })).toThrow();
     expect(() => checkSource(harness, { source: "", filename: "a.tsx" })).toThrow();
   });
-  it("exits 1 from the CLI on violations and 0 when clean", () => {
+  it("exits 1 from the CLI on violations and 0 when clean", { timeout: PROCESS_TIMEOUT }, () => {
     const dir = mkdtempSync(join(tmpdir(), "gdg-design-"));
     try {
       writeFileSync(join(dir, "bad.tsx"), violating);
@@ -219,7 +222,7 @@ describe.skipIf(!hasSkills)("MCP over stdio", () => {
         args: [join(packageRoot, "harness/mcp.mjs")],
       }),
     );
-  });
+  }, PROCESS_TIMEOUT);
   afterAll(async () => client?.close());
 
   it("lists and reads the same resources as the loader", async () => {
@@ -230,7 +233,7 @@ describe.skipIf(!hasSkills)("MCP over stdio", () => {
     expect(entry.contents[0].text).toContain("### Task sequence");
     await expect(client.readResource({ uri: "gdg-design://nope" })).rejects.toThrow();
   });
-  it("returns the CLI's resolution and findings", async () => {
+  it("returns the CLI's resolution and findings", { timeout: PROCESS_TIMEOUT }, async () => {
     const resolved = await client.callTool({
       name: "resolve_design_context",
       arguments: { scenarioId: "scenario.profile-edit" },
